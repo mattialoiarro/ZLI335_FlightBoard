@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "defaultChannel";
     private static final String CHANNEL_NAME = "Default Channel";
 
+    private static final String API_KEY = "1113408d2f332aefd4e4da305c355d89";
+
+
     private NotificationManager notificationManager;
 
     @Override
@@ -45,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setSmallIcon(R.drawable.flightboard_icon)
                 .setContentTitle("Your tracked flight")
                 .setContentText("FlightStatus")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         notificationManager.notify(0, builder.build());
     }
+
+
 
 }

@@ -15,25 +15,63 @@
         app:titleTextColor="@color/white"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="vertical" />
+        android:layout_height="wrap_content"
+        android:padding="40dp">
 
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:visibility="gone"
-        android:layout_below="@+id/toolbar"/>
+        <TextView
+            android:id="@+id/flight_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/flight_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flight_number"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/departure_airport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flight_status"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/arrival_airport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/departure_airport"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/departure_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flight_status"
+            android:layout_alignParentEnd="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/arrival_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/departure_time"
+            android:layout_alignParentEnd="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/airline_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/arrival_airport"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

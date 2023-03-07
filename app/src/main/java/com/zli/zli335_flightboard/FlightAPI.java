@@ -40,6 +40,7 @@ public class FlightAPI {
             this.listener = listener;
         }
 
+        //Got help with chatgpt
         @Override
         protected String doInBackground(Void... voids) {
             try {
@@ -50,7 +51,7 @@ public class FlightAPI {
                 conn.connect();
 
                 int responseCode = conn.getResponseCode();
-                if (responseCode != 200) {
+                if (responseCode != 404) {
                     throw new RuntimeException("HTTP response code: " + responseCode);
                 }
 
