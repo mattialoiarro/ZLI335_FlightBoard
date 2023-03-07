@@ -1,11 +1,9 @@
 package com.zli.zli335_flightboard;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Flight {
-    public Flight(String flightNumber, String departureAirport, String arrivalAirport, LocalDateTime scheduledDepartureTime, LocalDateTime actualDepartureTime, LocalDateTime plusHours, LocalDateTime actualArrivalTime, String flightStatus) {
-    }
+
 
     public String getFlightNumber() {
         return flightNumber;

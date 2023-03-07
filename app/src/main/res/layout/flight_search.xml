@@ -20,7 +20,8 @@
         android:text="Search"
         android:layout_below="@+id/search_bar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:onClick="onButtonClick"/>
 
     <ImageView
         android:id="@+id/imageView"
