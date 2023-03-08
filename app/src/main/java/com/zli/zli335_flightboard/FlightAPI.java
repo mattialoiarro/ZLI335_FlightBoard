@@ -74,10 +74,10 @@ public class FlightAPI {
                     String departureDateTime = flightObject.getJSONObject("departure").getString("scheduled");
                     String arrivalDateTime = flightObject.getJSONObject("arrival").getString("scheduled");
 
-                    //Create FlightData object and add to list
+                   /* //Create FlightData object and add to list
                     FlightListAdapter flightData = new FlightListAdapter(flightIata, flightIcao, airlineIata, airlineIcao,
                             flightNumberFull, departureAirportIata, arrivalAirportIata, departureDateTime, arrivalDateTime);
-                    flightDataList.add(flightData);
+                    flightDataList.add(flightData);*/
                 }
             } else {
                 Log.e(TAG, "Error getting flight data: " + responseCode);
