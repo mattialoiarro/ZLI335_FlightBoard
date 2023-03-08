@@ -1,60 +1,124 @@
 package com.zli.zli335_flightboard;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CHANNEL_ID = "defaultChannel";
-    private static final String CHANNEL_NAME = "Default Channel";
-
-    private static final String API_KEY = "1113408d2f332aefd4e4da305c355d89";
-
-
-    private NotificationManager notificationManager;
+    private ArrayList<Flight> flightData;
+    private ListView flightListView;
+    private FlightListAdapter flightListAdapter;
+    private ProgressBar progressBar;
+    private FlightAPI flightAPI;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.flight_search);
+        setContentView(R.layout.activity_main);
 
-        this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+        // Initialize the FlightAPI instance
+        flightAPI = new FlightAPI();
+
+        // Find the ListView and ProgressBar in the layout file
+        flightListView = findViewById(R.id.flightListView);
+        progressBar = findViewById(R.id.progressBar);
+
+        // Set up the search bar in the action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setCustomView(R.layout.flight_search);
+        searchView = actionBar.getCustomView().findViewById(R.id.search_bar);
+        searchView.setIconifiedByDefault(false);
+        searchView.requestFocus();
+
+        // Set up the search bar listener to handle user input
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                progressBar.setVisibility(View.VISIBLE);
+
+                flightAPI.getFlights(query, new FlightAPI.FlightDataCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Flight> flights) {
+                        //Hide the progress bar
+                        progressBar.setVisibility(View.GONE);
+
+                        //Store the flight data and update the FlightListAdapter
+                        flightData = flights;
+                        flightListAdapter = new FlightListAdapter(MainActivity.this,flightData);
+                        flightListView.setAdapter(flightListAdapter);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        // Hide the progress bar and display an error message
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+
+    // Menu-related methods
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+
+    // Define a new interface that extends FlightAPI.FlightDataCallback
+    public interface FlightDataListener extends FlightAPI.FlightDataCallback {
+        // Add any additional methods or callbacks that you need
+    }
+
+    private FlightDataListener flightDataListener = new FlightDataListener() {
+        @Override
+        public void onSuccess(ArrayList<Flight> flights) {
+            progressBar.setVisibility(View.GONE);
+            flightData.clear();
+            flightData.addAll(flights);
+            flightListAdapter.notifyDataSetChanged();
         }
-    }
 
-    public void onButtonClick(View view) {
-        EditText searchBar = findViewById(R.id.search_bar);
+        @Override
+        public void onError(String errorMessage) {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    };
 
-        String searchQuery = searchBar.getText().toString();
+    private FlightAPI.FlightDataCallback flightDataCallback = new FlightAPI.FlightDataCallback() {
+        @Override
+        public void onSuccess(ArrayList<Flight> flights) {
+            flightDataListener.onSuccess(flights);
+        }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("searchQuery", searchQuery);
-        startActivity(intent);
-
-        setContentView(R.layout.flight_search);
-    }
-
-    private void sendNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.flightboard_icon)
-                .setContentTitle("Your tracked flight")
-                .setContentText("FlightStatus")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        notificationManager.notify(0, builder.build());
-    }
-
-
-
+        @Override
+        public void onError(String errorMessage) {
+            flightDataListener.onError(errorMessage);
+        }
+    };
 }
+
