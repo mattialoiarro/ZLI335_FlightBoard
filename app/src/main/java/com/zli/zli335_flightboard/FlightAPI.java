@@ -15,13 +15,13 @@ import java.util.ArrayList;
 public class FlightAPI {
 
 
-        private static final String TAG = "FlightAPI";
-        private static final String BASE_URL = "http://api.aviationstack.com/v1";
-        private String apiKey;
+    private static final String TAG = "FlightAPI";
+    private static final String BASE_URL = "http://api.aviationstack.com/v1";
+    private String apiKey;
 
-        public FlightAPI() {
-            this.apiKey = apiKey;
-        }
+    public FlightAPI() {
+        this.apiKey = apiKey;
+    }
 
     public ArrayList<Flight> getFlights(String searchQuery, FlightDataCallback flightDataCallback) {
         ArrayList<Flight> flights = new ArrayList<>();
@@ -32,62 +32,62 @@ public class FlightAPI {
     }
 
 
-        public ArrayList<FlightListAdapter> getFlightData(String flightNumber) {
-            ArrayList<FlightListAdapter> flightDataList = new ArrayList<>();
+    public ArrayList<FlightListAdapter> getFlightData(String flightNumber) {
+        ArrayList<FlightListAdapter> flightDataList = new ArrayList<>();
 
-            try {
-                //Create URL object for API endpoint
-                URL url = new URL(BASE_URL + "/flights?access_key=" + apiKey + "&flight_iata=" + flightNumber);
+        try {
+            //Create URL object for API endpoint
+            URL url = new URL(BASE_URL + "/flights?access_key=" + apiKey + "&flight_iata=" + flightNumber);
 
-                //Open connection to API endpoint
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            //Open connection to API endpoint
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                //Set request method
-                connection.setRequestMethod("GET");
+            //Set request method
+            connection.setRequestMethod("GET");
 
-                int responseCode = connection.getResponseCode();
+            int responseCode = connection.getResponseCode();
 
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String inputLine;
-                    StringBuilder response = new StringBuilder();
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-
-                    // Parse JSON response
-                    JSONObject jsonObject = new JSONObject(response.toString());
-                    JSONArray data = jsonObject.getJSONArray("data");
-
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject flightObject = data.getJSONObject(i);
-
-                        //Extract flight data from JSON object
-                        String flightIata = flightObject.getString("flight_iata");
-                        String flightIcao = flightObject.getString("flight_icao");
-                        String airlineIata = flightObject.getString("airline_iata");
-                        String airlineIcao = flightObject.getString("airline_icao");
-                        String flightNumberFull = flightObject.getString("flight_number");
-                        String departureAirportIata = flightObject.getJSONObject("departure").getString("airport_iata");
-                        String arrivalAirportIata = flightObject.getJSONObject("arrival").getString("airport_iata");
-                        String departureDateTime = flightObject.getJSONObject("departure").getString("scheduled");
-                        String arrivalDateTime = flightObject.getJSONObject("arrival").getString("scheduled");
-
-                        //Create FlightData object and add to list
-                        FlightListAdapter flightData = new FlightListAdapter(flightIata, flightIcao, airlineIata, airlineIcao,
-                                flightNumberFull, departureAirportIata, arrivalAirportIata, departureDateTime, arrivalDateTime);
-                        flightDataList.add(flightData);
-                    }
-                } else {
-                    Log.e(TAG, "Error getting flight data: " + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "Exception getting flight data: " + e.getMessage());
-            }
+                in.close();
 
-            return flightDataList;
+                // Parse JSON response
+                JSONObject jsonObject = new JSONObject(response.toString());
+                JSONArray data = jsonObject.getJSONArray("data");
+
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject flightObject = data.getJSONObject(i);
+
+                    //Extract flight data from JSON object
+                    String flightIata = flightObject.getString("flight_iata");
+                    String flightIcao = flightObject.getString("flight_icao");
+                    String airlineIata = flightObject.getString("airline_iata");
+                    String airlineIcao = flightObject.getString("airline_icao");
+                    String flightNumberFull = flightObject.getString("flight_number");
+                    String departureAirportIata = flightObject.getJSONObject("departure").getString("airport_iata");
+                    String arrivalAirportIata = flightObject.getJSONObject("arrival").getString("airport_iata");
+                    String departureDateTime = flightObject.getJSONObject("departure").getString("scheduled");
+                    String arrivalDateTime = flightObject.getJSONObject("arrival").getString("scheduled");
+
+                    //Create FlightData object and add to list
+                    FlightListAdapter flightData = new FlightListAdapter(flightIata, flightIcao, airlineIata, airlineIcao,
+                            flightNumberFull, departureAirportIata, arrivalAirportIata, departureDateTime, arrivalDateTime);
+                    flightDataList.add(flightData);
+                }
+            } else {
+                Log.e(TAG, "Error getting flight data: " + responseCode);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception getting flight data: " + e.getMessage());
         }
+
+        return flightDataList;
+    }
 
     public interface FlightDataCallback {
 

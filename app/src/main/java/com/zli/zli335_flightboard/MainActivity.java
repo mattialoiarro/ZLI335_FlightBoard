@@ -1,8 +1,10 @@
 package com.zli.zli335_flightboard;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -31,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         flightAPI = new FlightAPI();
 
         // Find the ListView and ProgressBar in the layout file
-        flightListView = findViewById(R.id.flightListView);
         progressBar = findViewById(R.id.progressBar);
 
         // Set up the search bar in the action bar
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
                         //Store the flight data and update the FlightListAdapter
                         flightData = flights;
-                        flightListAdapter = new FlightListAdapter(MainActivity.this,flightData);
-                        flightListView.setAdapter(flightListAdapter);
+                        flightListAdapter = new FlightListAdapter(MainActivity.this, flightData);
+                        flightListView.setAdapter((ListAdapter) flightListAdapter);
                     }
 
                     @Override
@@ -81,9 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Menu-related methods
+    @SuppressLint("ResourceType")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.layout.activity_main, layout);
         return true;
     }
 

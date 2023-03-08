@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
 
     <EditText
@@ -12,29 +11,29 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:height="48dp"
+        android:autofillHints=""
         android:hint="@string/search_your_plane"
         android:inputType="text"
         android:minHeight="48dp"
-        android:autofillHints=""
         tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/search"
         android:layout_below="@+id/search_bar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:onClick="onButtonClick"/>
+        android:onClick="onButtonClick"
+        android:text="@string/search" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="221dp"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/flightboard_icon"
         android:layout_marginStart="85dp"
         android:layout_marginTop="40dp"
-        android:contentDescription="@string/flightboard_icon" />
+        android:contentDescription="@string/flightboard_icon"
+        app:srcCompat="@drawable/flightboard_icon" />
 
 </RelativeLayout>
